@@ -134,4 +134,21 @@ region and field, with a world map, 19 code-drawn vector scenes, a UTC
 timeline strip and a date-check audit block. `main.py` copies the
 committed `entry.png` to `$MAKEFUN_OUTPUT_DIR`.
 
+## Verify it
+
+The build is deterministic: run the publisher twice into two different
+folders and the two outputs come out byte-identical, matching the
+committed `entry.png` exactly:
+
+```sh
+MAKEFUN_OUTPUT_DIR=/tmp/out1 python3 main.py
+MAKEFUN_OUTPUT_DIR=/tmp/out2 python3 main.py
+sha256sum /tmp/out1/entry.png /tmp/out2/entry.png entry.png
+```
+
+All three hashes should be the same. `main.py` also checks the image
+itself before copying — it refuses anything that is not a real PNG
+(magic-header check) and refuses a copy whose sha256 differs from the
+source.
+
 Sources: Reuters, AP, AFP, BBC, Al Jazeera, KCNA, Bank of Korea, USTR.
